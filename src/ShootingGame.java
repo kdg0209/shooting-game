@@ -14,6 +14,9 @@ public class ShootingGame extends JFrame {
     private Image gameScreen = new ImageIcon("src/images/game_screen.png").getImage();
     private boolean isMainScreen, isLoadingScreen, isGameScreen;
 
+    public static Game game = new Game();
+
+
     public ShootingGame() {
         setTitle("Shooting Game");
         setUndecorated(true);
@@ -57,6 +60,8 @@ public class ShootingGame extends JFrame {
 
         // 3초후에 게임화면으로 넘어가도록 설정
         loadingTimer.schedule(loadingTask, 3000);
+
+        game.start();
     }
 
     public void paint(Graphics g) {
@@ -75,16 +80,31 @@ public class ShootingGame extends JFrame {
         }
         if (isGameScreen) {
             g.drawImage(gameScreen,0, 0, null);
+            game.gameDraw(g);
         }
 
         this.repaint();
     }
 
     class KeyListener extends KeyAdapter {
-
         @Override
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
+                case KeyEvent.VK_W:
+                    game.setUp(true);
+                    break;
+                case KeyEvent.VK_S:
+                    game.setDown(true);
+                    break;
+                case KeyEvent.VK_A:
+                    game.setLeft(true);
+                    break;
+                case KeyEvent.VK_D:
+                    game.setRight(true);
+                    break;
+                case KeyEvent.VK_SPACE:
+                    game.setShooting(true);
+                    break;
                 case KeyEvent.VK_ENTER:
                     if (isMainScreen) {
                         gameStart();
@@ -92,6 +112,26 @@ public class ShootingGame extends JFrame {
                     break;
                 case KeyEvent.VK_ESCAPE:
                     System.exit(0);
+                    break;
+            }
+        }
+
+        public void keyReleased(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W:
+                    game.setUp(false);
+                    break;
+                case KeyEvent.VK_S:
+                    game.setDown(false);
+                    break;
+                case KeyEvent.VK_A:
+                    game.setLeft(false);
+                    break;
+                case KeyEvent.VK_D:
+                    game.setRight(false);
+                    break;
+                case KeyEvent.VK_SPACE:
+                    game.setShooting(false);
                     break;
             }
         }
